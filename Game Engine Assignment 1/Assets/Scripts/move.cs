@@ -3,15 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEngine.SceneManagement;
+using System;
+using System.Runtime.InteropServices;
 
 public class move : MonoBehaviour
 {
+
+    [DllImport("MidtermDll")]
+    private static extern int NewHP(int hp, int add);
 
     private Rigidbody rb;
     public float speed;
     private float dirX;
     private bool grounded;
     public Vector3 jump;
+
+    public int HP = 1;
+    public int HPAdd = 2;
 
     void Start()
     {
@@ -25,13 +33,18 @@ public class move : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            Destroy(gameObject);
-            SceneManager.LoadScene("GameOver");
+            HP -= 1;
         }
 
         if(collision.gameObject.tag == "End")
         {
             SceneManager.LoadScene("Win");
+        }
+
+        if(collision.gameObject.tag == "HP")
+        {
+            HP = NewHP(HP, HPAdd);
+            Destroy(collision.gameObject);
         }
 
     }
@@ -53,6 +66,12 @@ public class move : MonoBehaviour
         if (gameObject.transform.position.x <= -21.46f)
         {
             transform.position = new Vector3(-21.46f, gameObject.transform.position.y, gameObject.transform.position.z);
+        }
+
+        if(HP == 0)
+        {
+            Destroy(gameObject);
+            SceneManager.LoadScene("GameOver");
         }
     }
 
