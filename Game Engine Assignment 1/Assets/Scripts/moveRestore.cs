@@ -34,6 +34,7 @@ public class moveRestore : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             HP -= 1;
+            Destroy(collision.gameObject);
         }
 
         if (collision.gameObject.tag == "End")
